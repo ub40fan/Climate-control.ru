@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ru">
+<style>
+  :root {
+    --primary: #4361ee;
+    --success: #06d6a0;
+    --danger: #ef476f;
+    --warning: #ffd166;
+    --light: #f8f9fa;
+    --dark: #212529;
+    --gray: #6c757d;
+    --card-bg: white;
+    --shadow: 0 4px 12px rgba(0,0,0,0.08);
+    --radius: 16px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: #f0f4f8;
+    color: var(--dark);
+    line-height: 1.6;
+    padding: 16px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  header {
+    text-align: center;
+    margin-bottom: 24px;
+    padding-top: 8px;
+  }
+  h1 {
+    font-size: 1.8em;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+  .subtitle {
+    color: var(--gray);
+    font-size: 0.95em;
+  }
+  .card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 20px;
+    margin-bottom: 20px;
+    transition: transform 0.2s;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 20px;
+    border: none;
+    border-radius: 12px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    color: white;
+    min-height: 52px;
+  }
+  .btn-primary { background: var(--primary); }
+  .btn-success { background: var(--success); color: var(--dark); }
+  .btn-outline {
+    background: transparent;
+    border: 2px solid var(--primary);
+    color: var(--primary);
+  }
+  .btn-block {
+    display: flex;
+    width: 100%;
+    margin: 8px 0;
+  }
+  .btn-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .form-group {
+    margin: 16px 0;
+  }
+  label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--dark);
+  }
+  input[type="number"] {
+    width: 100%;
+    padding: 14px;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    font-size: 1.1em;
+    transition: border-color 0.2s;
+  }
+  input[type="number"]:focus {
+    border-color: var(--primary);
+    outline: none;
+  }
+  .hint {
+    font-size: 0.85em;
+    color: var(--gray);
+    margin-top: 6px;
+    display: block;
+  }
+  .metric-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 16px;
+    margin: 20px 0;
+  }
+  .metric {
+    text-align: center;
+    padding: 16px;
+    background: #f0f7ff;
+    border-radius: 12px;
+  }
+  .metric-value {
+    font-size: 1.8em;
+    font-weight: 700;
+    color: var(--primary);
+  }
+  .metric-label {
+    font-size: 0.9em;
+    color: var(--gray);
+    margin-top: 4px;
+  }
+  canvas {
+    max-width: 100%;
+    height: 240px !important;
+    margin-top: 16px;
+  }
+  footer {
+    text-align: center;
+    color: var(--gray);
+    font-size: 0.85em;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+  }
+  @media (max-width: 600px) {
+    .btn { padding: 12px; font-size: 0.95em; }
+    h1 { font-size: 1.5em; }
+  }
+</style>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ИК-обучение — Микроклимат</title>
+  <style>
+    /* ВСТАВЬТЕ ТОТ ЖЕ CSS, ЧТО В index.html */
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>🎓 Обучение ИК-пульту</h2>
+    <p>Настройте прибор на ЛЮБОЙ кондиционер или ТВ за 10 секунд.</p>
+    <ol>
+      <li>Нажмите кнопку ниже</li>
+      <li>Направьте пульт на устройство</li>
+      <li>Нажмите на пульте: <strong>«Охлаждение 17°C»</strong> или <strong>POWER</strong></li>
+    </ol>
+    <button class="btn btn-primary" onclick="startLearn()">▶️ Начать обучение</button>
+    <div id="status" class="hint" style="text-align:center; margin:20px 0; color:var(--gray);">
+      Готово к обучению
+    </div>
+    <a href="index.html" class="btn btn-outline" style="display:block; text-align:center;">◀️ Вернуться</a>
+  </div>
+
+  <script>
+    let learning = false;
+
+    async function startLearn() {
+      learning = true;
+      document.getElementById('status').textContent = 'Жду ИК-сигнал...';
+      document.getElementById('status').style.color = '#ef476f';
+
+      await fetch('/api/ir_start_learn');
+      checkStatus();
+    }
+
+    async function checkStatus() {
+      if (!learning) return;
+      const res = await fetch('/api/ir_check');
+      const data = await res.json();
+
+      if (data.status === 'success') {
+        document.getElementById('status').innerHTML = '✅ Успешно! Код сохранён.<br><small>' + data.code + '</small>';
+        document.getElementById('status').style.color = '#06d6a0';
+        learning = false;
+      } else if (data.status === 'waiting') {
+        setTimeout(checkStatus, 500);
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Скачать данные — Микроклимат</title>
+  <style>
+    :root {
+      --primary: #4361ee;
+      --success: #06d6a0;
+      --danger: #ef476f;
+      --warning: #ffd166;
+      --light: #f8f9fa;
+      --dark: #212529;
+      --gray: #6c757d;
+      --card-bg: white;
+      --shadow: 0 4px 12px rgba(0,0,0,0.08);
+      --radius: 16px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #f0f4f8;
+      color: var(--dark);
+      line-height: 1.6;
+      padding: 16px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+      padding-top: 8px;
+    }
+    h1 {
+      font-size: 1.8em;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .subtitle {
+      color: var(--gray);
+      font-size: 0.95em;
+      flex: 1 1 100%;
+    }
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px 20px;
+      border: 2px solid var(--primary);
+      border-radius: 12px;
+      font-size: 1em;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+      min-height: 52px;
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+    .btn-outline {
+      background: transparent;
+      color: var(--primary);
+    }
+    .btn.active {
+      background: var(--primary);
+      color: white;
+    }
+    .btn.inactive {
+      background: transparent;
+      color: var(--primary);
+    }
+    .btn-group {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+      margin: 16px 0;
+    }
+    .hint {
+      font-size: 0.85em;
+      color: var(--gray);
+      margin-top: 6px;
+      display: block;
+    }
+    input[type="email"] {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin: 8px 0;
+    }
+    footer {
+      text-align: center;
+      color: var(--gray);
+      font-size: 0.85em;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #eee;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>📥 Скачать отчёты</h1>
+      <div class="subtitle">С отчётами по зонам риска (комфорт/риск/критично)</div>
+    </div>
+    <a href="help.html" class="btn btn-outline" style="padding:8px 12px; font-size:0.9em;">📞 Помощь</a>
+  </header>
+
+  <div class="card">
+    <h2>1. Какой параметр вас интересует?</h2>
+    <div class="btn-group" id="paramButtons">
+      <button class="btn btn-outline" data-param="temp">🌡️ Температура</button>
+      <button class="btn btn-outline" data-param="hum">💧 Влажность</button>
+      <button class="btn btn-outline" data-param="lux">☀️ Освещённость</button>
+      <button class="btn btn-outline" data-param="all">📊 Все параметры</button>
+    </div>
+    <p id="paramHint" class="hint" style="margin-top:12px; display:none;">
+      Выбрано: <span id="paramName">...</span>
+    </p>
+  </div>
+
+  <div class="card">
+    <h2>2. За какой период нужны данные?</h2>
+    <div class="btn-group" id="periodButtons">
+      <button class="btn btn-outline" data-period="day">📆 За сегодня</button>
+      <button class="btn btn-outline" data-period="week">📅 За неделю</button>
+      <button class="btn btn-outline" data-period="month">📆 За месяц</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>3. Формат отчёта</h2>
+    <div class="btn-group">
+      <button class="btn btn-outline" onclick="downloadCSV()">📥 CSV</button>
+      <button class="btn btn-outline" onclick="downloadPDF()">📄 PDF</button>
+    </div>
+
+    <div style="margin-top:20px;">
+      <label>Email для отправки отчёта:</label>
+      <input type="email" id="reportEmail" placeholder="ваш@email.ru">
+      <button class="btn btn-success" onclick="sendEmailReport()" style="width:100%;">📤 Отправить на email</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <a href="index.html" class="btn btn-block btn-outline">◀️ Вернуться к мониторингу</a>
+  </div>
+
+  <footer>
+    Отчёты содержат цветовую маркировку зон риска.
+  </footer>
+
+  <script>
+    let selectedParam = null;
+    let selectedPeriod = null;
+    const paramNames = {
+      temp: 'Температура',
+      hum: 'Влажность',
+      lux: 'Освещённость',
+      all: 'Все параметры'
+    };
+
+    // Активация кнопок параметров
+    document.querySelectorAll('#paramButtons .btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#paramButtons .btn').forEach(b => b.classList.replace('btn-primary', 'btn-outline'));
+        btn.classList.replace('btn-outline', 'btn-primary');
+        selectedParam = btn.dataset.param;
+        document.getElementById('paramName').textContent = paramNames[selectedParam];
+        document.getElementById('paramHint').style.display = 'block';
+      });
+    });
+
+    // Активация кнопок периода
+    document.querySelectorAll('#periodButtons .btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#periodButtons .btn').forEach(b => b.classList.replace('btn-primary', 'btn-outline'));
+        btn.classList.replace('btn-outline', 'btn-primary');
+        selectedPeriod = btn.dataset.period;
+      });
+    });
+
+    // Генерация CSV
+    function generateCSV() {
+      return "timestamp,temp,hum,lux\n1712345600,22.3,48,120\n1712349200,22.5,47,110";
+    }
+
+    // Скачать CSV
+    function downloadCSV() {
+      if (!selectedParam || !selectedPeriod) {
+        alert('Выберите параметр и период');
+        return;
+      }
+      const csv = generateCSV();
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `climate_${selectedParam}_${selectedPeriod}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    // Скачать PDF (имитация)
+    function downloadPDF() {
+      if (!selectedParam || !selectedPeriod) {
+        alert('Выберите параметр и период');
+        return;
+      }
+      const content = `Отчёт по микроклимату\nПараметр: ${paramNames[selectedParam]}\nПериод: ${selectedPeriod}\n\nДанные:\n${generateCSV()}`;
+      const blob = new Blob([content], { type: 'application/pdf' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `climate_${selectedParam}_${selectedPeriod}.pdf`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    // Отправка email
+    function sendEmailReport() {
+      if (!selectedParam || !selectedPeriod) {
+        alert('Выберите параметр и период');
+        return;
+      }
+      const email = document.getElementById('reportEmail').value;
+      if (!email) {
+        alert('Укажите email');
+        return;
+      }
+      const periods = { day: '01.04.2025 по 01.04.2025', week: '01.04.2025 по 07.04.2025', month: '01.04.2025 по 30.04.2025' };
+      const subject = `Отчёт по микроклимату (${paramNames[selectedParam]})`;
+      const body =
+        `Уважаемый пользователь,\n\n` +
+        `ID датчика: CLIM-ABC123\n` +
+        `Высылаю отчёт от ${periods[selectedPeriod]}.\n\n` +
+        `Данные в формате CSV:\n` +
+        `${generateCSV()}\n\n` +
+        `Краткий анализ:\n⚠️ Обнаружено кратковременное превышение влажности до 58% (критично >55%). Тенденция изменения: плавная.\n\n` +
+        `С уважением,\nСистема мониторинга микроклимата`;
+
+      window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    }
+  </script>
+</body>
+</html>

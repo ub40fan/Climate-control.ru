@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Помощь — Микроклимат</title>
+  <style>
+    :root {
+      --primary: #4361ee;
+      --success: #06d6a0;
+      --danger: #ef476f;
+      --warning: #ffd166;
+      --light: #f8f9fa;
+      --dark: #212529;
+      --gray: #6c757d;
+      --card-bg: white;
+      --shadow: 0 4px 12px rgba(0,0,0,0.08);
+      --radius: 16px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #f0f4f8;
+      color: var(--dark);
+      line-height: 1.6;
+      padding: 16px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+    h1, h2 {
+      color: var(--primary);
+      margin-bottom: 16px;
+    }
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px 20px;
+      border: none;
+      border-radius: 12px;
+      font-size: 1em;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+      color: white;
+      min-height: 52px;
+    }
+    .btn-primary { background: var(--primary); }
+    .btn-outline {
+      background: transparent;
+      border: 2px solid var(--primary);
+      color: var(--primary);
+    }
+    .btn:active {
+      filter: invert(1);
+    }
+    ul {
+      padding-left: 20px;
+      margin: 12px 0;
+    }
+    li {
+      margin-bottom: 8px;
+    }
+    a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    .specs {
+      background: #f8f9fa;
+      padding: 16px;
+      border-radius: 12px;
+      margin: 16px 0;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>📞 Помощь и поддержка</h1>
+    <a href="index.html" class="btn btn-outline">◀️ Назад</a>
+  </header>
+
+  <div class="card">
+    <h2>📚 Нормативные документы</h2>
+    <ul>
+      <li><a href="https://docs.cntd.ru/document/1200142521" target="_blank">ГОСТ Р 57913-2017 «Документы архивные. Требования к условиям хранения»</a></li>
+      <li><a href="https://docs.cntd.ru/document/1200005487" target="_blank">СП 44.13330.2011 «Административные и бытовые здания»</a></li>
+    </ul>
+
+    <h2>⚙️ Технические характеристики прибора</h2>
+    <div class="specs">
+      <p><strong>Диапазон измерения:</strong></p>
+      <ul>
+        <li>Температура: от <strong>0°C до +60°C</strong></li>
+        <li>Влажность: от <strong>0% до 100%</strong></li>
+        <li>Освещённость: от <strong>1 до 65 535 лк</strong></li>
+      </ul>
+      <p><strong>Условия эксплуатации:</strong></p>
+      <ul>
+        <li>Температура окружающей среды: <strong>–10°C … +50°C</strong></li>
+        <li>Относительная влажность: <strong>до 80% (без конденсата)</strong></li>
+      </ul>
+      <p><strong>Автономная работа:</strong></p>
+      <ul>
+        <li>От аккумулятора 18650 (3000 мА·ч): <strong>до 10 дней</strong> в режиме записи раз в 30 мин</li>
+      </ul>
+    </div>
+
+    <h2>📧 Контакт разработчика</h2>
+    <p>По всем вопросам обращайтесь на почту:<br>
+    <strong>kvarxelua@gmail.ru</strong></p>
+  </div>
+</body>
+</html>
