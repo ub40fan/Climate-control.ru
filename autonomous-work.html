@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Помощь — Микроклимат</title>
+  <style>
+    :root {
+      --primary: #4361ee;
+      --success: #06d6a0;
+      --danger: #ef476f;
+      --warning: #ffd166;
+      --light: #f8f9fa;
+      --dark: #212529;
+      --gray: #6c757d;
+      --card-bg: white;
+      --shadow: 0 4px 12px rgba(0,0,0,0.08);
+      --radius: 16px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #f0f4f8;
+      color: var(--dark);
+      line-height: 1.6;
+      padding: 16px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+    h1, h2 {
+      color: var(--primary);
+      margin-bottom: 16px;
+    }
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px 20px;
+      border: none;
+      border-radius: 12px;
+      font-size: 1em;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+      color: white;
+      min-height: 52px;
+    }
+    .btn-primary { background: var(--primary); }
+    .btn-outline {
+      background: transparent;
+      border: 2px solid var(--primary);
+      color: var(--primary);
+    }
+    .btn:active {
+      filter: brightness(0.9);
+    }
+    ul {
+      padding-left: 20px;
+      margin: 12px 0;
+    }
+    li {
+      margin-bottom: 8px;
+    }
+    a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    .specs {
+      background: #cacbcc;
+      padding: 16px;
+      border-radius: 12px;
+      margin: 16px 0;
+    }
+    .back-link {
+      display: inline-block;
+      margin-top: 20px;
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .back-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🔋 Автономная работа</h1>
+    <a href="javascript:history.back()" class="btn btn-outline">◀️ Вернуться</a>
+  </header>
+
+  <div class="card">
+    <h2>Расчет времени автономной работы</h2>
+
+    <h3>1. Разбивка режимов работы за цикл (3 часа = 10800 секунд)</h3>
+    <ul>
+      <li><strong>Режим глубокого сна (Deep Sleep)</strong>
+        <ul>
+          <li>Ток: 15 мкА = 0.015 мА (верхняя граница)</li>
+          <li>Время: 10800 - 17 = 10783 секунды</li>
+          <li>Время в часах: 10783 / 3600 ≈ 2.995 часа</li>
+        </ul>
+      </li>
+      <li><strong>Фоновая запись</strong> (каждые 30 минут, 6 раз за 3 часа)
+        <ul>
+          <li>Ток: 100 мА</li>
+          <li>Время на одну запись: 2 секунды</li>
+          <li>Общее время: 6 × 2 = 12 секунд</li>
+          <li>Время в часах: 12 / 3600 ≈ 0.00333 часа</li>
+        </ul>
+      </li>
+      <li><strong>Просмотр данных</strong> (1 раз в 3 часа)
+        <ul>
+          <li>Ток: 100 мА</li>
+          <li>Время: 5 секунд</li>
+          <li>Время в часах: 5 / 3600 ≈ 0.00139 часа</li>
+        </ul>
+      </li>
+    </ul>
+
+    <h3>2. Расчет потребляемого заряда (в мА·ч) за один 3-часовой цикл</h3>
+    <p>Формула: <em>Заряд (мА·ч) = Ток (мА) × Время (ч)</em></p>
+    <ul>
+      <li>От Deep Sleep: 0.015 мА × 2.995 ч ≈ <strong>0.0449 мА·ч</strong></li>
+      <li>От фоновой записи: 100 мА × 0.00333 ч ≈ <strong>0.333 мА·ч</strong></li>
+      <li>От просмотра данных: 100 мА × 0.00139 ч ≈ <strong>0.139 мА·ч</strong></li>
+    </ul>
+    <p><strong>Суммарный заряд за цикл:</strong> 0.0449 + 0.333 + 0.139 ≈ <strong>0.5169 мА·ч</strong></p>
+
+    <h3>3. Расчет среднего тока и времени работы</h3>
+    <ul>
+      <li><strong>Средний ток потребления:</strong> 0.5169 мА·ч / 3 ч ≈ <strong>0.172 мА</strong></li>
+      <li><strong>Общая емкость системы:</strong> 2 аккумулятора 18650 (2600 мА·ч × 2) = <strong>5200 мА·ч</strong></li>
+      <li><strong>Теоретическое время работы:</strong> 5200 / 0.172 ≈ <strong>30 232 часа</strong> ≈ <strong>1259 дней</strong> ≈ <strong>3.45 года</strong></li>
+    </ul>
+
+    <h3>4. Реалистичный прогноз с учетом практических факторов</h3>
+    <ul>
+      <li><strong>Саморазряд аккумуляторов:</strong> Li-ion теряет 2–5% в месяц → за 3+ года — почти полный разряд.</li>
+      <li><strong>Потеря емкости:</strong> Необратимое снижение емкости с течением времени.</li>
+      <li><strong>Потребление стабилизатора:</strong> LDO или DC-DC преобразователь имеет собственный ток покоя, сравнимый с потреблением в сне.</li>
+    </ul>
+
+    <h3>✅ Итог</h3>
+    <p>Система спроектирована очень энергоэффективно. Однако реальное время работы будет ограничено характеристиками аккумуляторов.</p>
+    <p><strong>Ожидаемое реальное время автономной работы:</strong> <strong>от 1.5 до 2.5 лет.</strong></p>
+  </div>
+</body>
+</html>
+
