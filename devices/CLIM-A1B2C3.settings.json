@@ -1,0 +1,5 @@
+{
+  "target_temp": 20.0,
+  "target_hum": 50.0,
+  "log_interval": 30
+}

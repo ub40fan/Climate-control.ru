@@ -1,0 +1,15 @@
+{
+  "telegram_enabled": true,
+  "telegram_chat_id": "624296849",
+  "notify_temp": true,
+  "notify_hum": true,
+  "notify_lux": true,
+  "alerts": {
+    "temp_min": 15,
+    "temp_max": 30,
+    "hum_min": 10,
+    "hum_max": 60,
+    "lux_min": 10,
+    "lux_max": 1000
+  }
+}
